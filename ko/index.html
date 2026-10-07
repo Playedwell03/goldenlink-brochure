@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoldenLink 브로슈어</title>
+<meta property="og:title" content="GoldenLink 브로슈어">
+<meta property="og:image" content="page.jpg">
+<style>
+  :root{--bg:#1f2833;--fg:#f4efe6;--accent:#c39257}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+  header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;position:sticky;top:0;background:rgba(31,40,51,.92);backdrop-filter:blur(8px);z-index:2}
+  header b{letter-spacing:.2em;font-size:13px}
+  header a{color:var(--bg);background:var(--accent);text-decoration:none;font-size:13px;font-weight:700;padding:8px 12px;border-radius:999px;white-space:nowrap}
+  main{padding:0 0 32px}
+  .full{display:block;width:100%;height:auto}
+  .panels{display:none}
+  .panel{width:100%;aspect-ratio:857.67/1818;background-image:url(page.jpg);background-size:300% 100%;background-repeat:no-repeat}
+  .panel+.panel{margin-top:10px}
+  .p-cover{background-position:100% 0}.p-left{background-position:0 0}.p-mid{background-position:50% 0}
+  .note{font-size:12px;opacity:.6;text-align:center;padding:16px}
+  @media (orientation:portrait) and (max-width:900px){.full{display:none}.panels{display:block}}
+</style>
+</head>
+<body>
+<header><b>GOLDENLINK</b><a href="goldenlink-brochure-ko.pdf" download>PDF 받기</a></header>
+<main>
+  <img class="full" src="page.jpg" alt="GoldenLink 브로슈어">
+  <div class="panels" role="img" aria-label="GoldenLink 브로슈어">
+    <div class="panel p-cover"></div>
+    <div class="panel p-left"></div>
+    <div class="panel p-mid"></div>
+  </div>
+  <p class="note">두 손가락으로 확대할 수 있어요 · 가로로 돌리면 원본 배치로 보여요</p>
+</main>
+</body>
+</html>
