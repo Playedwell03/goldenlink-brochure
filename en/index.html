@@ -2,48 +2,81 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>GoldenLink Brochure</title>
 <meta property="og:title" content="GoldenLink Brochure">
 <meta property="og:image" content="front.jpg">
 <style>
-  :root{--bg:#1f2833;--fg:#f4efe6;--accent:#c39257}
+  :root{--bg:#1f2833;--fg:#f4efe6;--accent:#c39257;--hdr:52px;--ftr:64px;--ratio:.4718}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
-  header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;position:sticky;top:0;background:rgba(31,40,51,.92);backdrop-filter:blur(8px);z-index:2}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+  header{display:flex;justify-content:space-between;align-items:center;gap:12px;height:var(--hdr);padding:0 16px;position:sticky;top:0;background:rgba(31,40,51,.92);backdrop-filter:blur(8px);z-index:2}
   header b{letter-spacing:.2em;font-size:13px}
   header a{color:var(--bg);background:var(--accent);text-decoration:none;font-size:13px;font-weight:700;padding:8px 12px;border-radius:999px;white-space:nowrap}
-  main{padding:0 0 32px}
   .sheet{display:block;width:100%;height:auto}
-  .sheet+.label+.sheet{margin-top:0}
   .label{font-size:12px;letter-spacing:.15em;opacity:.55;padding:20px 16px 8px}
-  .panels{display:none}
-  /* 3단 접지 한 칸 = 시트 가로의 1/3 */
-  .panel{width:100%;aspect-ratio:857.67/1818;background-size:300% 100%;background-repeat:no-repeat}
-  .panel+.panel{margin-top:10px}
-  .f{background-image:url(front.jpg)}.b{background-image:url(back.jpg)}
-  .c0{background-position:0 0}.c1{background-position:50% 0}.c2{background-position:100% 0}
   .note{font-size:12px;opacity:.6;text-align:center;padding:16px}
-  @media (orientation:portrait) and (max-width:900px){.wide{display:none}.panels{display:block}}
+  .pager-wrap{display:none}
+  /* 휴대폰 세로: 6칸을 옆으로 넘기는 슬라이드 */
+  @media (orientation:portrait) and (max-width:900px){
+    html,body{height:100%;overflow:hidden}
+    .wide{display:none}
+    .pager-wrap{display:flex;flex-direction:column;height:calc(100dvh - var(--hdr))}
+    .pager{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none}
+    .pager::-webkit-scrollbar{display:none}
+    .slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;scroll-snap-stop:always;padding:12px 0}
+    .panel{width:min(calc(100vw - 32px),calc((100dvh - var(--hdr) - var(--ftr) - 24px) * var(--ratio)));aspect-ratio:857.67/1818;background-size:300% 100%;background-repeat:no-repeat;border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.45);will-change:transform,opacity;transform-origin:center}
+    .f{background-image:url(front.jpg)}.b{background-image:url(back.jpg)}
+    .c0{background-position:0 0}.c1{background-position:50% 0}.c2{background-position:100% 0}
+    footer{height:var(--ftr);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding-bottom:env(safe-area-inset-bottom)}
+    .dots{display:flex;gap:8px}
+    .dots button{width:8px;height:8px;padding:0;border:0;border-radius:999px;background:var(--fg);opacity:.3;transition:width .35s ease,opacity .35s ease;cursor:pointer}
+    .dots button.on{width:22px;opacity:1;background:var(--accent)}
+    .hint{font-size:11px;opacity:.5;transition:opacity .6s ease}
+  }
+  @media (prefers-reduced-motion:reduce){.pager{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <header><b>GOLDENLINK</b><a href="goldenlink-brochure-en.pdf" download>Download PDF</a></header>
-<main>
-  <div class="wide">
-    <div class="label">FRONT</div><img class="sheet" src="front.jpg" alt="GoldenLink Brochure — FRONT">
-    <div class="label">BACK</div><img class="sheet" src="back.jpg" alt="GoldenLink Brochure — BACK">
+<div class="wide">
+  <div class="label">FRONT</div><img class="sheet" src="front.jpg" alt="GoldenLink Brochure — FRONT">
+  <div class="label">BACK</div><img class="sheet" src="back.jpg" alt="GoldenLink Brochure — BACK">
+  <p class="note">Landscape shows the original layout</p>
+</div>
+<div class="pager-wrap">
+  <!-- 읽는 순서: 표지 → 안쪽 01·02·03 → 기술 상세 → 사업 소개·연락처 -->
+  <div class="pager" id="pager" aria-label="GoldenLink Brochure">
+    <div class="slide"><div class="panel f c2"></div></div>
+    <div class="slide"><div class="panel b c0"></div></div>
+    <div class="slide"><div class="panel b c1"></div></div>
+    <div class="slide"><div class="panel b c2"></div></div>
+    <div class="slide"><div class="panel f c0"></div></div>
+    <div class="slide"><div class="panel f c1"></div></div>
   </div>
-  <!-- 휴대폰 세로: 표지 → 안쪽 01·02·03 → 기술 상세 → 사업 소개·연락처 -->
-  <div class="panels" role="img" aria-label="GoldenLink Brochure">
-    <div class="panel f c2"></div>
-    <div class="panel b c0"></div>
-    <div class="panel b c1"></div>
-    <div class="panel b c2"></div>
-    <div class="panel f c0"></div>
-    <div class="panel f c1"></div>
-  </div>
-  <p class="note">Pinch to zoom · Rotate to landscape for the original layout</p>
-</main>
+  <footer><div class="dots" id="dots"></div><div class="hint" id="hint">Swipe to turn pages →</div></footer>
+</div>
+<script>
+(() => {
+  const pager = document.getElementById('pager'), dots = document.getElementById('dots'), hint = document.getElementById('hint');
+  const slides = [...pager.children], panels = slides.map(s => s.firstElementChild);
+  slides.forEach((_, i) => { const b = document.createElement('button'); b.setAttribute('aria-label', (i + 1) + ' / ' + slides.length); b.onclick = () => go(i); dots.appendChild(b); });
+  const go = i => pager.scrollTo({ left: Math.max(0, Math.min(slides.length - 1, i)) * pager.clientWidth, behavior: 'smooth' });
+  let raf = 0, cur = -1;
+  // 넘기는 동안: 가운데에서 멀어질수록 살짝 작아지고 흐려진다
+  const paint = () => {
+    raf = 0;
+    const w = pager.clientWidth || 1, pos = pager.scrollLeft / w;
+    panels.forEach((p, i) => { const d = Math.min(1, Math.abs(i - pos)); p.style.transform = 'scale(' + (1 - .08 * d) + ')'; p.style.opacity = 1 - .45 * d; });
+    const n = Math.round(pos);
+    if (n !== cur) { cur = n; [...dots.children].forEach((b, i) => b.classList.toggle('on', i === n)); }
+    if (pos > .3) hint.style.opacity = 0;
+  };
+  pager.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(paint); }, { passive: true });
+  addEventListener('resize', paint);
+  addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(cur + 1); if (e.key === 'ArrowLeft') go(cur - 1); });
+  paint();
+})();
+</script>
 </body>
 </html>
