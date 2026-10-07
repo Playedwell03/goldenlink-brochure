@@ -7,7 +7,7 @@
 <meta property="og:title" content="GoldenLink Brochure">
 <meta property="og:image" content="front.jpg">
 <style>
-  :root{--bg:#1f2833;--fg:#f4efe6;--accent:#c39257;--hdr:52px;--ftr:64px;--ratio:.4718}
+  :root{--bg:#1f2833;--fg:#f4efe6;--accent:#c39257;--hdr:52px;--ratio:.4718}
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
   header{display:flex;justify-content:space-between;align-items:center;gap:12px;height:var(--hdr);padding:0 16px;position:sticky;top:0;background:rgba(31,40,51,.92);backdrop-filter:blur(8px);z-index:2}
@@ -24,15 +24,10 @@
     .pager-wrap{display:flex;flex-direction:column;height:calc(100dvh - var(--hdr))}
     .pager{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none}
     .pager::-webkit-scrollbar{display:none}
-    .slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;scroll-snap-stop:always;padding:12px 0}
-    .panel{width:min(calc(100vw - 32px),calc((100dvh - var(--hdr) - var(--ftr) - 24px) * var(--ratio)));aspect-ratio:857.67/1818;background-size:300% 100%;background-repeat:no-repeat;border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.45);will-change:transform,opacity;transform-origin:center}
+    .slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;scroll-snap-stop:always;padding:8px 0}
+    .panel{width:min(calc(100vw - 16px),calc((100dvh - var(--hdr) - 16px) * var(--ratio)));aspect-ratio:857.67/1818;background-size:300% 100%;background-repeat:no-repeat;border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.45);will-change:transform,opacity;transform-origin:center}
     .f{background-image:url(front.jpg)}.b{background-image:url(back.jpg)}
     .c0{background-position:0 0}.c1{background-position:50% 0}.c2{background-position:100% 0}
-    footer{height:var(--ftr);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding-bottom:env(safe-area-inset-bottom)}
-    .dots{display:flex;gap:8px}
-    .dots button{width:8px;height:8px;padding:0;border:0;border-radius:999px;background:var(--fg);opacity:.3;transition:width .35s ease,opacity .35s ease;cursor:pointer}
-    .dots button.on{width:22px;opacity:1;background:var(--accent)}
-    .hint{font-size:11px;opacity:.5;transition:opacity .6s ease}
   }
   @media (prefers-reduced-motion:reduce){.pager{scroll-behavior:auto}}
 </style>
@@ -54,13 +49,11 @@
     <div class="slide"><div class="panel f c0"></div></div>
     <div class="slide"><div class="panel f c1"></div></div>
   </div>
-  <footer><div class="dots" id="dots"></div><div class="hint" id="hint">Swipe to turn pages →</div></footer>
 </div>
 <script>
 (() => {
-  const pager = document.getElementById('pager'), dots = document.getElementById('dots'), hint = document.getElementById('hint');
+  const pager = document.getElementById('pager');
   const slides = [...pager.children], panels = slides.map(s => s.firstElementChild);
-  slides.forEach((_, i) => { const b = document.createElement('button'); b.setAttribute('aria-label', (i + 1) + ' / ' + slides.length); b.onclick = () => go(i); dots.appendChild(b); });
   const go = i => pager.scrollTo({ left: Math.max(0, Math.min(slides.length - 1, i)) * pager.clientWidth, behavior: 'smooth' });
   let raf = 0, cur = -1;
   // 넘기는 동안: 가운데에서 멀어질수록 살짝 작아지고 흐려진다
@@ -68,9 +61,7 @@
     raf = 0;
     const w = pager.clientWidth || 1, pos = pager.scrollLeft / w;
     panels.forEach((p, i) => { const d = Math.min(1, Math.abs(i - pos)); p.style.transform = 'scale(' + (1 - .08 * d) + ')'; p.style.opacity = 1 - .45 * d; });
-    const n = Math.round(pos);
-    if (n !== cur) { cur = n; [...dots.children].forEach((b, i) => b.classList.toggle('on', i === n)); }
-    if (pos > .3) hint.style.opacity = 0;
+    cur = Math.round(pos);
   };
   pager.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(paint); }, { passive: true });
   addEventListener('resize', paint);
